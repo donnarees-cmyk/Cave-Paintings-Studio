@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Messages on the Cave Wall – Cave Painting (6th Grade ELA)</title>
+<style>
+:root{--bg:#eadbc2;--card:#fffaf0;--ink:#2e2218;--rock:#6b4f3a;--ochre:#c4572a;--gold:#d9a21b;--ok:#2f9e44;--no:#c92a2a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:linear-gradient(#4a3524,#6b4f3a);color:#fff;text-align:center;padding:16px 10px;border-bottom:5px solid var(--ochre)}
+header h1{margin:0;font-size:1.6rem}header p{margin:4px 0 0;opacity:.9}
+nav{display:flex;max-width:760px;margin:10px auto 0;gap:6px;padding:0 10px}
+nav button{flex:1;margin:0;text-align:center;font-weight:bold}nav button.on{background:var(--rock);color:#fff}
+main{max-width:760px;margin:0 auto;padding:10px}
+.card{background:var(--card);border:3px solid var(--rock);border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 4px 0 #c9b28a}
+h2{margin:.2em 0;color:#7a3318}
+button{font:inherit;cursor:pointer;border:2px solid var(--rock);background:#fff;border-radius:10px;padding:9px 13px;margin:4px 0;width:100%;text-align:left;color:var(--ink)}
+button:hover:not(:disabled){background:#ffe8a3}
+button.go{background:var(--ochre);border-color:#8a3a1a;color:#fff;font-weight:bold;width:auto;text-align:center}
+button.right{background:#d3f9d8;border-color:var(--ok)}button.wrong{background:#ffe3e3;border-color:var(--no)}
+.fb{display:none;margin-top:8px;padding:9px;border-radius:9px}.fb.ok{display:block;background:#d3f9d8}.fb.no{display:block;background:#ffe3e3}
+.tag{background:var(--gold);border-radius:20px;padding:2px 12px;font-size:.8rem;font-weight:bold}
+.chk{background:#fdf0dc;border-left:5px solid var(--ochre);padding:10px;margin-top:10px;border-radius:8px}
+canvas{width:100%;touch-action:none;border:4px solid var(--rock);border-radius:12px;cursor:crosshair;display:block}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.tools button{width:auto;margin:0;padding:7px 10px;font-size:.9rem}
+.tools button.on{outline:3px solid #2b6cb0;background:#e7f0ff}
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid #000;vertical-align:-2px;margin-right:4px}
+input[type=text]{font:inherit;padding:9px;border:2px solid var(--rock);border-radius:10px;width:100%}
+.wall{background:radial-gradient(#7d6450,#4e3b2c);color:#fff;border-radius:12px;text-align:center;padding:16px;font-size:2.2rem;letter-spacing:6px;border:4px solid var(--rock)}
+.wall small{display:block;font-size:.95rem;letter-spacing:0;margin-top:6px;color:#f1dfc2}
+.c{text-align:center}.big{font-size:4rem;text-align:center;line-height:1.1}
+pre{white-space:pre-wrap;background:#f1e3c8;padding:10px;border-radius:10px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header><h1>🎨 Messages on the Cave Wall</h1><p>Read about Stone Age art, paint like a cave artist, and become a Wall Detective!</p></header>
+<nav id="tabs"></nav>
+<main>
+<section id="p0"></section>
+<section id="p1" hidden>
+ <div class="card"><h2>🖐 Cave Studio</h2>
+ <p>Cave artists used <b>natural pigments</b>, not store-bought paint. Pick a pigment and paint your own cave wall. Try the <b>Hand Stencil</b>: it blows paint around a hand, just like they did!</p>
+ <div class="tools" id="pal"></div>
+ <div class="tools"><button id="tbrush" class="on" onclick="setTool('brush')">🖌 Brush</button><button id="thand" onclick="setTool('hand')">🖐 Hand Stencil</button><label style="padding:6px">Size <input type="range" id="sz" min="3" max="30" value="10"></label></div>
+ <canvas id="cv" width="700" height="380"></canvas>
+ <div class="tools"><button onclick="wall()">🧽 New Wall</button><button class="go" onclick="save()">💾 Save My Painting</button></div></div>
+</section>
+<section id="p2" hidden></section>
+<div class="card"><h2>📋 My Report</h2><label>Your name:<input type="text" id="rn" placeholder="Name" oninput="rep()"></label><pre id="rep"></pre><button class="go" onclick="navigator.clipboard.writeText($('rep').textContent).then(()=>this.textContent='Copied! ✅')">Copy My Score</button></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const S=[
+{h:"1. The Oldest Art",t:"<p>Long before writing existed, people painted on cave walls. Some of the oldest known paintings, found in Indonesia and Spain, are more than 40,000 years old. Others, like the famous paintings at Lascaux in France, are about 17,000 years old. Scientists estimate their ages by testing charcoal in the paint and the thin rock crust that formed over it.</p>",q:"What is the main idea of this section?",o:["Lascaux is in France.","Cave paintings are among the oldest human art, and scientists can estimate their ages.","Charcoal is black.","Indonesia has more caves than Spain."],a:1,e:"The other choices are details. The main idea covers the whole section."},
+{h:"2. Paint from the Earth",t:"<p>Cave artists made paint from the land. They ground <b>ochre</b>, a rock rich in iron, into red and yellow powder. Burned wood made black charcoal. They mixed the powders with animal fat or water, then spread the paint with their fingers, with brushes of animal hair or moss, or by blowing it through hollow bones. To see in the dark, artists burned animal fat in small stone lamps.</p>",q:"Which detail BEST supports the claim that cave painting took planning and effort?",o:["Cave walls are cold and dark.","Bison lived in Europe.","Charcoal is black.","Artists ground rocks, mixed paint, and burned lamps to see."],a:3,e:"Grinding, mixing, and carrying light all show planning."},
+{h:"3. What Did They Paint?",t:"<p>Most cave paintings show animals: bison, horses, deer, wild cattle called aurochs, and mammoths. Artists often used the bumps and curves of the rock to make an animal look three-dimensional. People appear rarely, usually as simple stick figures. Many caves also have handprints. To make a <b>stencil</b>, a person pressed a hand to the wall and blew pigment around it, leaving a hand-shaped outline. Dots and lines appear too, and no one is sure what they mean.</p>",q:"What is a <b>stencil</b>, based on the passage?",o:["A shape left when paint is blown around an object","A kind of stone lamp","A brush made of moss","A wild animal"],a:0,e:"The clue is “blew pigment around it, leaving a hand-shaped outline.”"},
+{h:"4. Why Did They Paint?",t:"<p>No one knows for sure. Some scholars think the paintings were part of hunting ceremonies. Others think they told stories, taught young people about animals, or marked sacred places. Since no one left written explanations, each idea is only a <b>theory</b>.</p><p>In 1940, teenagers exploring near Montignac, France, discovered Lascaux. So many visitors came that their breath and the humidity began to harm the paint, and the cave closed to the public in 1963. Today people visit a careful replica instead.</p>",q:"What does <b>theory</b> mean in this passage?",o:["A proven fact","An idea that tries to explain something but is not proven","A type of paint","A cave tour"],a:1,e:"The text says no one left explanations, so each idea is not proven.",q2:"Why did Lascaux close to visitors?",o2:["The paint ran out","It was too dark to see","Visitors’ breath and humidity were damaging the paintings","The teenagers owned it"],a2:2,e2:"The passage says breath and humidity harmed the paint."}
+];
+let cp=0,det=null,drawn=false;
+function qH(id,q,o){return `<div class="chk"><b>Checkpoint:</b> ${q}<div id="${id}">${o.map((x,n)=>`<button onclick="cpAns('${id}',${n})">${"ABCD"[n]}. ${x}</button>`).join("")}</div><div class="fb" id="${id}f"></div></div>`}
+$("p0").innerHTML=S.map((s,i)=>`<div class="card"><span class="tag">Read</span><h2>${s.h}</h2>${s.t}${qH("c"+i,s.q,s.o)}${s.q2?qH("d"+i,s.q2,s.o2):""}</div>`).join("")+`<div class="card c"><button class="go" onclick="tab(1)">Go to the Cave Studio ➜</button></div>`;
+function cpAns(id,n){const i=+id.slice(1),s=S[i],two=id[0]==="d",a=two?s.a2:s.a,e=two?s.e2:s.e,b=[...$(id).children];b.forEach(x=>x.disabled=true);b[a].classList.add("right");const ok=n===a;if(ok)cp++;else b[n].classList.add("wrong");const f=$(id+"f");f.className="fb "+(ok?"ok":"no");f.innerHTML=(ok?"✅ Correct! ":"❌ Not quite. ")+e;rep()}
+$("tabs").innerHTML=["📜 Learn","🖐 Cave Studio","🔍 Wall Detective"].map((t,i)=>`<button id="tb${i}" onclick="tab(${i})">${t}</button>`).join("");
+function tab(i){[0,1,2].forEach(n=>{$("p"+n).hidden=n!==i;$("tb"+n).classList.toggle("on",n===i)});if(i===1&&!cv)initCv();if(i===2&&!D)startD();window.scrollTo(0,0)}
+// ---- Studio
+const P=[["Red ochre","#9c3d21"],["Yellow ochre","#d9a21b"],["Charcoal","#1d1a17"],["Clay white","#efe6d2"]];
+let cv,cx,col=P[0][1],tool="brush",pen=false,last;
+$("pal").innerHTML=P.map((p,n)=>`<button id="pc${n}" class="${n?"":"on"}" onclick="setCol(${n})"><span class="sw" style="background:${p[1]}"></span>${p[0]}</button>`).join("");
+function setCol(n){col=P[n][1];P.forEach((_,k)=>$("pc"+k).classList.toggle("on",k===n))}
+function setTool(t){tool=t;$("tbrush").classList.toggle("on",t==="brush");$("thand").classList.toggle("on",t==="hand")}
+function initCv(){cv=$("cv");cx=cv.getContext("2d");wall();
+cv.addEventListener("pointerdown",e=>{const p=pos(e);if(tool==="hand"){stamp(p);return}pen=true;last=p;seg(p,p)});
+cv.addEventListener("pointermove",e=>{if(!pen)return;const p=pos(e);seg(last,p);last=p});
+["pointerup","pointerleave"].forEach(v=>cv.addEventListener(v,()=>pen=false))}
+function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}}
+function wall(){const g=cx.createRadialGradient(350,190,40,350,190,420);g.addColorStop(0,"#8a7058");g.addColorStop(1,"#4f3b2b");cx.globalAlpha=1;cx.fillStyle=g;cx.fillRect(0,0,700,380);
+for(let i=0;i<1800;i++){cx.fillStyle=Math.random()<.5?"rgba(255,235,200,.10)":"rgba(0,0,0,.14)";cx.fillRect(Math.random()*700,Math.random()*380,1+Math.random()*3,1+Math.random()*3)}
+cx.strokeStyle="rgba(0,0,0,.12)";cx.lineWidth=3;for(let i=0;i<5;i++){cx.beginPath();cx.moveTo(Math.random()*700,0);cx.bezierCurveTo(Math.random()*700,120,Math.random()*700,250,Math.random()*700,380);cx.stroke()}drawn=false;rep()}
+function seg(a,b){const s=+$("sz").value;cx.lineCap="round";cx.strokeStyle=col;cx.lineWidth=s;cx.globalAlpha=.88;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke();cx.fillStyle=col;cx.globalAlpha=.4;for(let i=0;i<4;i++)cx.fillRect(b.x+(Math.random()-.5)*s*1.6,b.y+(Math.random()-.5)*s*1.6,2,2);cx.globalAlpha=1;if(!drawn){drawn=true;rep()}}
+function handPath(t){t.beginPath();t.ellipse(100,140,32,38,0,0,7);t.fill();[[82,110,76,52],[96,105,96,42],[111,107,117,48],[125,113,136,66],[70,145,40,122]].forEach(f=>{t.beginPath();t.moveTo(f[0],f[1]);t.lineTo(f[2],f[3]);t.stroke()})}
+function stamp(p){const T=document.createElement("canvas");T.width=200;T.height=230;const t=T.getContext("2d");t.fillStyle=col;for(let i=0;i<1300;i++){const a=Math.random()*6.28,r=Math.sqrt(Math.random())*98;t.globalAlpha=.5+Math.random()*.5;t.fillRect(100+Math.cos(a)*r,125+Math.sin(a)*r*1.1,2,2)}
+t.globalAlpha=1;t.globalCompositeOperation="destination-out";t.lineWidth=15;t.lineCap="round";handPath(t);cx.globalAlpha=1;cx.drawImage(T,p.x-100,p.y-125);if(!drawn){drawn=true;rep()}}
+function save(){const a=document.createElement("a");a.download="my-cave-painting.png";a.href=cv.toDataURL("image/png");a.click()}
+// ---- Wall Detective
+const W=[
+{w:"🦬 🦬 🦬 🦬",c:"Clue: Four bison are painted with great care. Bison are shown far more often than people.",q:"Which inference is BEST supported by the evidence?",o:["Bison were important to the people who painted them.","The painters were afraid of every animal.","Bison were the only animals alive then.","The painters never ate meat."],a:0,e:"Repeated, careful bison paintings suggest they mattered to the artists. The others have no evidence."},
+{w:"🖐 🖐",c:"Clue: Two handprints on the wall: one is large, one is small.",q:"What can you infer?",o:["Only one person ever visited.","Adults and children may both have been in the cave.","The hands were drawn by animals.","The cave was built last year."],a:1,e:"Different hand sizes are evidence that more than one person, maybe an adult and a child, left prints."},
+{w:"🦣 🔥",c:"Clue: A mammoth is painted deep inside the cave, far from daylight. Small stone lamps were found nearby.",q:"What can you infer?",o:["The artist painted by accident.","Caves were always bright.","The artist carried light into the dark on purpose.","Mammoths lived inside caves."],a:2,e:"Lamps near a painting far from daylight show the artist planned to work in the dark."},
+{w:"● ● ● ▬▬▬",c:"Clue: Dots and lines appear next to many cave animals, but no written explanation survives.",q:"Why can’t scientists be sure what the dots and lines mean?",o:["Because they are too small to see","Because the artists signed them","Because no one left a written explanation","Because they are exactly the same as letters"],a:2,e:"Without writing or other proof, any meaning is only a theory."}
+];
+let D=null;
+function startD(){D={n:0,pts:0};dq()}
+function dq(){const w=W[D.n];if(!w)return endD();$("p2").innerHTML=`<div class="card"><span class="tag">Wall ${D.n+1} of 4 · Score ${D.pts}</span><h2>🔍 What does the wall tell us?</h2><p>An <b>inference</b> is a smart guess based on evidence. Study the clue, then choose the inference that the evidence supports.</p><div class="wall">${w.w}<small>${w.c}</small></div><div class="chk">${w.q}<div id="do">${w.o.map((x,n)=>`<button onclick="dAns(${n})">${"ABCD"[n]}. ${x}</button>`).join("")}</div><div class="fb" id="df"></div><p id="dn"></p></div></div>`}
+function dAns(n){const w=W[D.n],b=[...$("do").children];b.forEach(x=>x.disabled=true);b[w.a].classList.add("right");const ok=n===w.a;if(ok)D.pts++;else b[n].classList.add("wrong");const f=$("df");f.className="fb "+(ok?"ok":"no");f.innerHTML=(ok?"✅ Great detective work! ":"❌ Not quite. ")+w.e;$("dn").innerHTML=`<button class="go" onclick="D.n++;dq()">${D.n<3?"Next wall ➜":"See my rank ➜"}</button>`;rep()}
+function endD(){const s=D.pts,r=s===4?["👑","Master Detective"]:s>=2?["🔍","Cave Detective"]:["🪨","Apprentice Detective"];det=s;$("p2").innerHTML=`<div class="card"><div class="big">${r[0]}</div><h2 class="c">${r[1]}!</h2><p class="c" style="font-size:1.2rem">You scored <b>${s} / 4</b>.</p><p class="c"><button class="go" onclick="startD()">Play Again 🔁</button> <button class="go" onclick="tab(1)">Paint in the Studio</button></p></div>`;rep()}
+function rep(){$("rep").textContent=`Name: ${$("rn").value||"Explorer"}\nActivity: Messages on the Cave Wall (Cave Painting)\nReading checkpoints: ${cp}/5\nWall Detective: ${det===null?"not finished":det+"/4"}\nCave Studio painting made: ${drawn?"Yes":"Not yet"}`}
+tab(0);rep();
+</script>
+</body>
+</html>
